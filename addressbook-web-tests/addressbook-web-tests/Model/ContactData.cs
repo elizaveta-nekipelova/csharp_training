@@ -26,7 +26,7 @@ namespace addressbook_web_tests
         private string birthDay = "";
         private string birthMonth = "-";
         private string birthYear = "";
-        private string anniversaryDay = "";
+        private string anniversaryDay = "-";
         private string anniversaryMonth = "-";
         private string anniversaryYear = "";
         private string address2 = "";

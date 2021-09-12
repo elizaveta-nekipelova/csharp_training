@@ -11,15 +11,44 @@ namespace addressbook_web_tests
 {
     public class ContactHelper : HelperBase
     {
-        public ContactHelper(IWebDriver driver)
-            : base(driver) { }
+        public ContactHelper(ApplicationManager manager)
+            : base(manager) { }
 
-        public void InitNewContactCreation()
+        public ContactHelper Create(ContactData contact)
         {
-            driver.FindElement(By.LinkText("add new")).Click();
+            InitNewContactCreation();
+            FillContactForm(contact);
+            SubmitContactCreation();
+            manager.Navigator.ReturnToHomePage();
+            return this;
         }
 
-        public void FillContactForm(ContactData contact)
+        public ContactHelper Modify(int index, ContactData newData)
+        {
+            driver.FindElement(By.XPath("(//input[@name='selected[]'])[" + index + "]")).Click();
+            driver.FindElement(By.XPath("(//img[@title='Edit'])[" + index + "]")).Click();
+            FillContactForm(newData);
+            driver.FindElement(By.Name("update")).Click();
+            manager.Navigator.ReturnToHomePage();
+            return this;
+        }
+
+        internal ContactHelper Remove(int index)
+        {
+            driver.FindElement(By.XPath("(//input[@name='selected[]'])[" + index + "]")).Click();
+            driver.FindElement(By.XPath("//input[@value='Delete']")).Click();
+            driver.SwitchTo().Alert().Accept();
+            manager.Navigator.ReturnToHomePage();
+            return this;
+        }
+
+        public ContactHelper InitNewContactCreation()
+        {
+            driver.FindElement(By.LinkText("add new")).Click();
+            return this;
+        }
+
+        public ContactHelper FillContactForm(ContactData contact)
         {
             driver.FindElement(By.Name("firstname")).SendKeys(contact.Firstname);
             driver.FindElement(By.Name("middlename")).SendKeys(contact.Middlename);
@@ -45,11 +74,13 @@ namespace addressbook_web_tests
             driver.FindElement(By.Name("address2")).SendKeys(contact.Address2);
             driver.FindElement(By.Name("phone2")).SendKeys(contact.Phone2);
             driver.FindElement(By.Name("notes")).SendKeys(contact.Notes);
+            return this;
         }
 
-        public void SubmitContactCreation()
+        public ContactHelper SubmitContactCreation()
         {
             driver.FindElement(By.XPath("//div[@id='content']/form/input[21]")).Click();
+            return this;
         }
     }
 }
