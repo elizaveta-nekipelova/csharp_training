@@ -8,9 +8,9 @@ namespace addressbook_web_tests
         [Test]
         public void ContactCreationTest()
         {
-            OpenHomePage();
-            Login(new AccountData("admin", "secret"));
-            InitNewContactCreation();
+            app.Navigator.OpenHomePage();
+            app.Auth.Login(new AccountData("admin", "secret"));
+            app.Contacts.InitNewContactCreation();
             ContactData contact = new ContactData("Test", "User");
             contact.Email = "test@user.com";
             contact.Company = "aaa";
@@ -20,9 +20,9 @@ namespace addressbook_web_tests
             contact.BirthMonth = "May";
             contact.BirthYear = "2000";
             contact.Notes = "Test";
-            FillContactForm(contact);
-            SubmitContactCreation();
-            ReturnToHomePage();
+            app.Contacts.FillContactForm(contact);
+            app.Contacts.SubmitContactCreation();
+            app.Navigator.ReturnToHomePage();
         }
     }
 }
