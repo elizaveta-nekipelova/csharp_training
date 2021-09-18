@@ -15,7 +15,16 @@ namespace addressbook_web_tests
             driver = manager.Driver;
         }
 
-        private bool IsElementPresent(By by)
+        public void Type(By locator, string text)
+        {
+            if (text != null)
+            {
+                driver.FindElement(locator).Clear();
+                driver.FindElement(locator).SendKeys(text);
+            }
+        }
+
+        public bool IsElementPresent(By by)
         {
             try
             {

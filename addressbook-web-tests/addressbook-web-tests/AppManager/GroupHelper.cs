@@ -27,6 +27,16 @@ namespace addressbook_web_tests
         public GroupHelper Modify(int index, GroupData newData)
         {
             manager.Navigator.GoToGroupsPage();
+
+            if (!GroupExists(index))
+            {
+                GroupData group = new GroupData("name");
+                group.Header = "header";
+                group.Footer = "footer";
+
+                Create(group);
+            }
+            
             SelectGroup(index);
             InitGroupModification();
             FillGroupForm(newData);
@@ -38,6 +48,16 @@ namespace addressbook_web_tests
         public GroupHelper Remove(int index)
         {
             manager.Navigator.GoToGroupsPage();
+
+            if(!GroupExists(index))
+            {
+                GroupData group = new GroupData("name");
+                group.Header = "header";
+                group.Footer = "footer";
+
+                Create(group);
+            }
+            
             SelectGroup(index);
             RemoveGroup();
             ReturnToGroupsPage();
@@ -52,9 +72,9 @@ namespace addressbook_web_tests
 
         public GroupHelper FillGroupForm(GroupData group)
         {
-            driver.FindElement(By.Name("group_name")).SendKeys(group.Name);
-            driver.FindElement(By.Name("group_header")).SendKeys(group.Header);
-            driver.FindElement(By.Name("group_footer")).SendKeys(group.Footer);
+            Type(By.Name("group_name"), group.Name);
+            Type(By.Name("group_header"), group.Header);
+            Type(By.Name("group_footer"), group.Footer);
             return this;
         }
 
@@ -93,6 +113,11 @@ namespace addressbook_web_tests
         {
             driver.FindElement(By.Name("update")).Click();
             return this;
+        }
+
+        public bool GroupExists(int index)
+        {
+            return IsElementPresent(By.XPath("(//input[@name='selected[]'])[" + index + "]"));
         }
     }
 }
