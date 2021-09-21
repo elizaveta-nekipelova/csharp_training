@@ -8,7 +8,15 @@ namespace addressbook_web_tests
         [Test]
         public void ContactRemovalTest()
         {
-            app.Contacts.Remove(1);
+            int index = 1;
+
+            if (!app.Contacts.ContactExists(index))
+            {
+                ContactData contact = new ContactData("Test", "User");
+                app.Contacts.Create(contact);
+            }
+
+            app.Contacts.Remove(index);
         }
     }
 }

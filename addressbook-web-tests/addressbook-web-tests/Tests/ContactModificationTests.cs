@@ -17,8 +17,16 @@ namespace addressbook_web_tests
             newData.BirthMonth = "May";
             newData.BirthYear = "2010";
             newData.Notes = "Test2";
+            
+            int index = 1;
 
-            app.Contacts.Modify(1, newData);
+            if (!app.Contacts.ContactExists(index))
+            {
+                ContactData contact = new ContactData("Test", "User");
+                app.Contacts.Create(contact);
+            }
+
+            app.Contacts.Modify(index, newData);
         }
     }
 }

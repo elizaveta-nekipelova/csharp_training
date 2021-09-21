@@ -27,16 +27,6 @@ namespace addressbook_web_tests
         public GroupHelper Modify(int index, GroupData newData)
         {
             manager.Navigator.GoToGroupsPage();
-
-            if (!GroupExists(index))
-            {
-                GroupData group = new GroupData("name");
-                group.Header = "header";
-                group.Footer = "footer";
-
-                Create(group);
-            }
-            
             SelectGroup(index);
             InitGroupModification();
             FillGroupForm(newData);
@@ -48,16 +38,6 @@ namespace addressbook_web_tests
         public GroupHelper Remove(int index)
         {
             manager.Navigator.GoToGroupsPage();
-
-            if(!GroupExists(index))
-            {
-                GroupData group = new GroupData("name");
-                group.Header = "header";
-                group.Footer = "footer";
-
-                Create(group);
-            }
-            
             SelectGroup(index);
             RemoveGroup();
             ReturnToGroupsPage();

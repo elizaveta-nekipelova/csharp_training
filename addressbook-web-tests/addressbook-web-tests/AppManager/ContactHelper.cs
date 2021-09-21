@@ -25,12 +25,6 @@ namespace addressbook_web_tests
 
         public ContactHelper Modify(int index, ContactData newData)
         {
-            if (!ContactExists(index))
-            {
-                ContactData contact = new ContactData("Test", "User");
-                Create(contact);
-            }
-
             driver.FindElement(By.XPath("(//input[@name='selected[]'])[" + index + "]")).Click();
             driver.FindElement(By.XPath("(//img[@title='Edit'])[" + index + "]")).Click();
             FillContactForm(newData);
@@ -41,12 +35,6 @@ namespace addressbook_web_tests
 
         internal ContactHelper Remove(int index)
         {
-            if (!ContactExists(index))
-            {
-                ContactData contact = new ContactData("Test", "User");
-                Create(contact);
-            }
-
             driver.FindElement(By.XPath("(//input[@name='selected[]'])[" + index + "]")).Click();
             driver.FindElement(By.XPath("//input[@value='Delete']")).Click();
             driver.SwitchTo().Alert().Accept();

@@ -17,7 +17,20 @@ namespace addressbook_web_tests
             newData.Header = null;
             newData.Footer = null;
 
-            app.Groups.Modify(1, newData);
+            int index = 1;
+
+
+            if (!app.Groups.GroupExists(index))
+            {
+                GroupData group = new GroupData("name");
+                group.Header = "header";
+                group.Footer = "footer";
+
+                app.Groups.Create(group);
+            }
+
+
+            app.Groups.Modify(index, newData);
         }
     }
 }

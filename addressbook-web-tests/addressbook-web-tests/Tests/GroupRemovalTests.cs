@@ -8,7 +8,18 @@ namespace addressbook_web_tests
         [Test]
         public void GroupRemovalTest()
         {
-            app.Groups.Remove(1);
+            int index = 1;
+
+            if (!app.Groups.GroupExists(index))
+            {
+                GroupData group = new GroupData("name");
+                group.Header = "header";
+                group.Footer = "footer";
+
+                app.Groups.Create(group);
+            }
+
+            app.Groups.Remove(index);
         }
     }
 }
