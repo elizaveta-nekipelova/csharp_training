@@ -25,8 +25,8 @@ namespace addressbook_web_tests
 
         public ContactHelper Modify(int index, ContactData newData)
         {
-            driver.FindElement(By.XPath("(//input[@name='selected[]'])[" + index + "]")).Click();
-            driver.FindElement(By.XPath("(//img[@title='Edit'])[" + index + "]")).Click();
+            driver.FindElement(By.XPath("(//input[@name='selected[]'])[" + (index + 1) + "]")).Click();
+            driver.FindElement(By.XPath("(//img[@title='Edit'])[" + (index + 1) + "]")).Click();
             FillContactForm(newData);
             driver.FindElement(By.Name("update")).Click();
             manager.Navigator.ReturnToHomePage();
@@ -35,7 +35,7 @@ namespace addressbook_web_tests
 
         internal ContactHelper Remove(int index)
         {
-            driver.FindElement(By.XPath("(//input[@name='selected[]'])[" + index + "]")).Click();
+            driver.FindElement(By.XPath("(//input[@name='selected[]'])[" + (index + 1) + "]")).Click();
             driver.FindElement(By.XPath("//input[@value='Delete']")).Click();
             driver.SwitchTo().Alert().Accept();
             manager.Navigator.ReturnToHomePage();
@@ -86,7 +86,22 @@ namespace addressbook_web_tests
 
         public bool ContactExists(int index)
         {
-            return IsElementPresent(By.XPath("(//input[@name='selected[]'])[" + index + "]"));
+            return IsElementPresent(By.XPath("(//input[@name='selected[]'])[" + (index + 1) + "]"));
+        }
+
+        public List<ContactData> GetContactsList()
+        {
+            List<ContactData> contacts = new List<ContactData>();
+            manager.Navigator.OpenHomePage();
+            IEnumerable<string> lastnameElements = driver.FindElements(By.XPath("//*[@id='maintable']/tbody/tr/td[2]")).Select(a => a.Text);
+            IEnumerable<string> firstnameElements = driver.FindElements(By.XPath("//*[@id='maintable']/tbody/tr/td[3]")).Select(a => a.Text);
+
+            for (int i = 0; i < lastnameElements.Count(); i++)
+            {
+                contacts.Add(new ContactData(firstnameElements.ElementAt(i), lastnameElements.ElementAt(i)));
+            }
+
+            return contacts;
         }
     }
 }

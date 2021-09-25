@@ -17,7 +17,7 @@ namespace addressbook_web_tests
             newData.Header = null;
             newData.Footer = null;
 
-            int index = 1;
+            int index = 0;
 
 
             if (!app.Groups.GroupExists(index))
@@ -29,8 +29,17 @@ namespace addressbook_web_tests
                 app.Groups.Create(group);
             }
 
+            List<GroupData> oldGroups = app.Groups.GetGroupsList();
 
             app.Groups.Modify(index, newData);
+
+            List<GroupData> newGroups = app.Groups.GetGroupsList();
+
+            oldGroups[index].Name = newData.Name;
+            oldGroups.Sort();
+            newGroups.Sort();
+            Assert.AreEqual(oldGroups, newGroups);
+            
         }
     }
 }

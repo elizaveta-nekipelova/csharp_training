@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using System.Collections.Generic;
 
 namespace addressbook_web_tests
 {
@@ -8,7 +9,7 @@ namespace addressbook_web_tests
         [Test]
         public void GroupRemovalTest()
         {
-            int index = 1;
+            int index = 0;
 
             if (!app.Groups.GroupExists(index))
             {
@@ -19,7 +20,14 @@ namespace addressbook_web_tests
                 app.Groups.Create(group);
             }
 
+            List<GroupData> oldGroups = app.Groups.GetGroupsList();
+
             app.Groups.Remove(index);
+
+            List<GroupData> newGroups = app.Groups.GetGroupsList();
+
+            oldGroups.RemoveAt(index);
+            Assert.AreEqual(newGroups, oldGroups);
         }
     }
 }

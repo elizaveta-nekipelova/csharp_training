@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using System.Collections.Generic;
 
 namespace addressbook_web_tests
 {
@@ -8,7 +9,7 @@ namespace addressbook_web_tests
         [Test]
         public void ContactRemovalTest()
         {
-            int index = 1;
+            int index = 0;
 
             if (!app.Contacts.ContactExists(index))
             {
@@ -16,7 +17,14 @@ namespace addressbook_web_tests
                 app.Contacts.Create(contact);
             }
 
+            List<ContactData> oldContacts = app.Contacts.GetContactsList();
+
             app.Contacts.Remove(index);
+
+            List<ContactData> newContacts = app.Contacts.GetContactsList();
+
+            oldContacts.RemoveAt(index);
+            Assert.AreEqual(oldContacts, newContacts);
         }
     }
 }

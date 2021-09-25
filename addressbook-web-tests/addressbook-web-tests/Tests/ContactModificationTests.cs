@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using System.Collections.Generic;
 
 namespace addressbook_web_tests
 {
@@ -26,7 +27,17 @@ namespace addressbook_web_tests
                 app.Contacts.Create(contact);
             }
 
+            List<ContactData> oldContacts = app.Contacts.GetContactsList();
+
             app.Contacts.Modify(index, newData);
+
+            List<ContactData> newContacts = app.Contacts.GetContactsList();
+
+            oldContacts[index].Firstname = newData.Firstname;
+            oldContacts[index].Lastname = newData.Lastname;
+            oldContacts.Sort();
+            oldContacts.Sort();
+            Assert.AreEqual(oldContacts, newContacts);
         }
     }
 }
