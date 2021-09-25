@@ -30,8 +30,11 @@ namespace addressbook_web_tests
             }
 
             List<GroupData> oldGroups = app.Groups.GetGroupsList();
+            GroupData oldData = oldGroups[index];
 
             app.Groups.Modify(index, newData);
+
+            Assert.AreEqual(oldGroups.Count, app.Groups.GetGroupsCount());
 
             List<GroupData> newGroups = app.Groups.GetGroupsList();
 
@@ -40,6 +43,14 @@ namespace addressbook_web_tests
             newGroups.Sort();
             Assert.AreEqual(oldGroups, newGroups);
             
+            foreach (GroupData group in newGroups)
+            {
+                if (group.Id == oldData.Id)
+                {
+                    Assert.AreEqual(newData.Name, group.Name);
+                }
+            }
+
         }
     }
 }

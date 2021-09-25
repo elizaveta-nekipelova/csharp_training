@@ -21,13 +21,21 @@ namespace addressbook_web_tests
             }
 
             List<GroupData> oldGroups = app.Groups.GetGroupsList();
+            GroupData oldData = oldGroups[index];
 
             app.Groups.Remove(index);
+
+            Assert.AreEqual(oldGroups.Count - 1, app.Groups.GetGroupsCount());
 
             List<GroupData> newGroups = app.Groups.GetGroupsList();
 
             oldGroups.RemoveAt(index);
             Assert.AreEqual(newGroups, oldGroups);
+
+            foreach (GroupData group in newGroups)
+            {
+                Assert.AreNotEqual(group.Id, oldData.Id);
+            }
         }
     }
 }

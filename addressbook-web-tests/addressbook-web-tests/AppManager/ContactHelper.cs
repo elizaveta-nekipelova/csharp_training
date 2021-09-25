@@ -14,12 +14,15 @@ namespace addressbook_web_tests
         public ContactHelper(ApplicationManager manager)
             : base(manager) { }
 
+        private List<ContactData> contactsCache = null;
+
         public ContactHelper Create(ContactData contact)
         {
             InitNewContactCreation();
             FillContactForm(contact);
             SubmitContactCreation();
             manager.Navigator.ReturnToHomePage();
+            contactsCache = null;
             return this;
         }
 
@@ -30,6 +33,7 @@ namespace addressbook_web_tests
             FillContactForm(newData);
             driver.FindElement(By.Name("update")).Click();
             manager.Navigator.ReturnToHomePage();
+            contactsCache = null;
             return this;
         }
 
@@ -39,6 +43,7 @@ namespace addressbook_web_tests
             driver.FindElement(By.XPath("//input[@value='Delete']")).Click();
             driver.SwitchTo().Alert().Accept();
             manager.Navigator.ReturnToHomePage();
+            contactsCache = null;
             return this;
         }
 
@@ -50,7 +55,6 @@ namespace addressbook_web_tests
 
         public ContactHelper FillContactForm(ContactData contact)
         {
-            Type(By.Name("firstname"), contact.Firstname);
             Type(By.Name("firstname"), contact.Firstname);
             Type(By.Name("middlename"), contact.Middlename);
             Type(By.Name("lastname"), contact.Lastname);
@@ -91,17 +95,20 @@ namespace addressbook_web_tests
 
         public List<ContactData> GetContactsList()
         {
-            List<ContactData> contacts = new List<ContactData>();
-            manager.Navigator.OpenHomePage();
-            IEnumerable<string> lastnameElements = driver.FindElements(By.XPath("//*[@id='maintable']/tbody/tr/td[2]")).Select(a => a.Text);
-            IEnumerable<string> firstnameElements = driver.FindElements(By.XPath("//*[@id='maintable']/tbody/tr/td[3]")).Select(a => a.Text);
-
-            for (int i = 0; i < lastnameElements.Count(); i++)
+            if (contactsCache == null)
             {
-                contacts.Add(new ContactData(firstnameElements.ElementAt(i), lastnameElements.ElementAt(i)));
+                contactsCache = new List<ContactData>();
+                manager.Navigator.OpenHomePage();
+                IEnumerable<string> lastnameElements = driver.FindElements(By.XPath("//*[@id='maintable']/tbody/tr/td[2]")).Select(a => a.Text);
+                IEnumerable<string> firstnameElements = driver.FindElements(By.XPath("//*[@id='maintable']/tbody/tr/td[3]")).Select(a => a.Text);
+
+                for (int i = 0; i < lastnameElements.Count(); i++)
+                {
+                    contactsCache.Add(new ContactData(firstnameElements.ElementAt(i), lastnameElements.ElementAt(i)));
+                }
             }
 
-            return contacts;
+            return new List<ContactData>(contactsCache);
         }
     }
 }
