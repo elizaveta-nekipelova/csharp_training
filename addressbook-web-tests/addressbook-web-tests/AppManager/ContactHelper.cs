@@ -99,16 +99,16 @@ namespace addressbook_web_tests
             {
                 contactsCache = new List<ContactData>();
                 manager.Navigator.OpenHomePage();
-                IEnumerable<string> lastnameElements = driver.FindElements(By.XPath("//*[@id='maintable']/tbody/tr/td[2]")).Select(a => a.Text);
-                IEnumerable<string> firstnameElements = driver.FindElements(By.XPath("//*[@id='maintable']/tbody/tr/td[3]")).Select(a => a.Text);
+                ICollection<IWebElement> contactList = driver.FindElements(By.Name("entry"));
 
-                for (int i = 0; i < lastnameElements.Count(); i++)
+                foreach (IWebElement element in contactList)
                 {
-                    contactsCache.Add(new ContactData(firstnameElements.ElementAt(i), lastnameElements.ElementAt(i)));
+                    contactsCache.Add(new ContactData(
+                        element.FindElements(By.TagName("td")).ElementAt(2).Text,
+                        element.FindElements(By.TagName("td")).ElementAt(1).Text));
                 }
             }
-
-            return new List<ContactData>(contactsCache);
+            return contactsCache;
         }
     }
 }
