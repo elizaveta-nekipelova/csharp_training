@@ -11,7 +11,7 @@ namespace addressbook_web_tests.Tests
     public class ContactInformationTest : AuthTestBase
     {
         [Test]
-        public void TestContactInformation()
+        public void TestContactInformationFormAndEdit()
         {
             ContactData fromTable = app.Contacts.GetContactInformationFromTable(0);
             ContactData fromForm = app.Contacts.GetContactInformationFromEditForm(0);
@@ -20,6 +20,19 @@ namespace addressbook_web_tests.Tests
             Assert.AreEqual(fromTable.Address, fromForm.Address);
             Assert.AreEqual(fromTable.AllPhones, fromForm.AllPhones);
             Assert.AreEqual(fromTable.AllEmails, fromForm.AllEmails);
+        }
+
+        [Test]
+        public void TestContactInformationDetailsAndEdit()
+        {
+            ContactData fromForm = app.Contacts.GetContactInformationFromEditForm(0);
+            ContactData fromDetails = app.Contacts.GetContactInformationFromDetails(0);
+
+            Assert.AreEqual(fromDetails, fromForm);
+            Assert.AreEqual(fromDetails.PersonalBlock, fromForm.PersonalBlock);
+            Assert.AreEqual(fromDetails.PhoneBlock, fromForm.PhoneBlock);
+            Assert.AreEqual(fromDetails.EmailBlock, fromForm.EmailBlock);
+            Assert.AreEqual(fromDetails.SummaryBlock, fromForm.SummaryBlock);
         }
     }
 }
