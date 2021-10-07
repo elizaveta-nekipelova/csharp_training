@@ -118,7 +118,22 @@ namespace addressbook_web_tests
                 }
                 else
                 {
-                    return (Email + "\r\n" + Email2 + "\r\n" + Email3).Trim();
+                    string res = "";
+
+                    if (Email != "")
+                    {
+                        res += Email;
+                    }
+                    if (Email2 != "")
+                    {
+                        res = res + "\r\n" + Email2;
+                    }
+                    if (Email3 != "")
+                    {
+                        res = res + "\r\n" + Email3;
+                    }
+
+                    return res.Trim();
                 }
             }
             set
