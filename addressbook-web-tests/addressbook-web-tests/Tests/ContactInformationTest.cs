@@ -25,14 +25,9 @@ namespace addressbook_web_tests.Tests
         [Test]
         public void TestContactInformationDetailsAndEdit()
         {
-            ContactData fromForm = app.Contacts.GetContactInformationFromEditForm(0);
-            ContactData fromDetails = app.Contacts.GetContactInformationFromDetails(0);
-
-            Assert.AreEqual(fromDetails, fromForm);
-            Assert.AreEqual(fromDetails.PersonalBlock, fromForm.PersonalBlock);
-            Assert.AreEqual(fromDetails.PhoneBlock, fromForm.PhoneBlock);
-            Assert.AreEqual(fromDetails.EmailBlock, fromForm.EmailBlock);
-            Assert.AreEqual(fromDetails.SummaryBlock, fromForm.SummaryBlock);
+            string fromForm = app.Contacts.GetContactInformationFromEditFormAsString(0);
+            string fromDetails = app.Contacts.GetContactInformationFromDetails(0);
+            Assert.AreEqual(fromForm, fromDetails);
         }
     }
 }

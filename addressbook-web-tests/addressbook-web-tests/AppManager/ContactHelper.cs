@@ -35,45 +35,11 @@ namespace addressbook_web_tests
             };
         }
 
-        public ContactData GetContactInformationFromDetails(int index)
+        public string GetContactInformationFromDetails(int index)
         {
             manager.Navigator.OpenHomePage();
-
             driver.FindElements(By.Name("entry"))[index].FindElements(By.TagName("td"))[6].FindElement(By.TagName("a")).Click();
-
-            string text = driver.FindElement(By.Id("container")).FindElement(By.Id("content")).Text;
-
-            string[] firstMiddleLastNames = driver.FindElement(By.Id("container")).FindElements(By.TagName("b"))[1].Text.Split(' ');
-            string[] details = text.Split(new string[] { "\r\n\r\n" }, StringSplitOptions.None);
-            string personalBlock = details[0].Replace("\r\n","");
-            string phoneBlock = details[1].Replace("\r\n","");
-            string emailBlock = details[2].Replace("\r\n", "");
-            string summaryBlock = (details[3] + "\r\n" + details[4] + "\r\n" + details[5]).Replace("\r\n", "");
-
-            ContactData res;
-            if(firstMiddleLastNames.Length == 3) // check if middle name exists
-            {
-                res = new ContactData(firstMiddleLastNames.First(), firstMiddleLastNames.Last())
-                {
-                    Middlename = firstMiddleLastNames[1],
-                    PersonalBlock = personalBlock,
-                    PhoneBlock = phoneBlock,
-                    EmailBlock = emailBlock,
-                    SummaryBlock = summaryBlock
-                };
-            }
-            else  // considering that fist and last names always exist and middlename doesn't contain spaces
-            {
-                res = new ContactData(firstMiddleLastNames.First(), firstMiddleLastNames.Last())
-                {
-                    PersonalBlock = personalBlock,
-                    PhoneBlock = phoneBlock,
-                    EmailBlock = emailBlock,
-                    SummaryBlock = summaryBlock
-                };
-            }
-
-            return res;
+            return driver.FindElement(By.Id("container")).FindElement(By.Id("content")).Text;
         }
 
         public ContactData GetContactInformationFromEditForm(int index)
@@ -122,6 +88,164 @@ namespace addressbook_web_tests
                 Phone2 = phone2,
                 Notes = notes
             };
+        }
+
+        public string GetContactInformationFromEditFormAsString(int index)
+        {
+            manager.Navigator.OpenHomePage();
+            InitContactModification(index);
+
+            string firstname = driver.FindElement(By.Name("firstname")).GetAttribute("value");
+            string middlename = driver.FindElement(By.Name("middlename")).GetAttribute("value");
+            string lastname = driver.FindElement(By.Name("lastname")).GetAttribute("value");
+            string nickname = driver.FindElement(By.Name("nickname")).GetAttribute("value");
+            string company = driver.FindElement(By.Name("company")).GetAttribute("value");
+            string title = driver.FindElement(By.Name("title")).GetAttribute("value");
+            string address = driver.FindElement(By.Name("address")).GetAttribute("value");
+
+            string homePhone = driver.FindElement(By.Name("home")).GetAttribute("value");
+            string mobilePhone = driver.FindElement(By.Name("mobile")).GetAttribute("value");
+            string workPhone = driver.FindElement(By.Name("work")).GetAttribute("value");
+            string fax = driver.FindElement(By.Name("fax")).GetAttribute("value");
+
+            string email = driver.FindElement(By.Name("email")).GetAttribute("value");
+            string email2 = driver.FindElement(By.Name("email2")).GetAttribute("value");
+            string email3 = driver.FindElement(By.Name("email3")).GetAttribute("value");
+
+            string homepage = driver.FindElement(By.Name("homepage")).GetAttribute("value");
+            string address2 = driver.FindElement(By.Name("address2")).Text;
+            string phone2 = driver.FindElement(By.Name("phone2")).GetAttribute("value");
+            string notes = driver.FindElement(By.Name("notes")).Text;
+
+            string names = "";
+            string personal = "";
+            string phones = "";
+            string emails = "";
+            string secondary = "";
+
+            if (firstname != "")
+            {
+                names = names + firstname;
+            }
+            if (middlename != "")
+            {
+                names = names + " " + middlename;
+            }
+            if (lastname != "")
+            {
+                names = names + " " + lastname;
+            }
+
+            names = names.Trim() + "\r\n";
+
+            if (nickname != "")
+            {
+                personal = personal + nickname;
+            }
+            if (title != "")
+            {
+                personal = personal + "\r\n"  + title;
+            }
+            if (company != "")
+            {
+                personal = personal + "\r\n" + company;
+            }
+            if (address != "")
+            {
+                personal = personal + "\r\n" + address;
+            }
+
+            if (nickname == "" && title == "" && company == "" && address == "")
+            {
+                personal = personal + "\r\n";
+            }
+            else
+            {
+                personal = personal.Trim() + "\r\n\r\n";
+            }
+
+            if (homePhone != "")
+            {
+                phones = phones + "H: " + homePhone;
+            }
+            if (mobilePhone != "")
+            {
+                phones = phones + "\r\nM: " + mobilePhone;
+            }
+            if (workPhone != "")
+            {
+                phones = phones + "\r\nW: " + workPhone;
+            }
+            if (fax != "")
+            {
+                phones = phones + "\r\nF: " + fax;
+            }
+
+            if (!(homePhone == "" && mobilePhone == "" && workPhone == "" && fax == ""))
+            {
+                phones = phones.Trim() + "\r\n\r\n";
+            }
+
+            if (email != "")
+            {
+                emails = emails + email;
+            }
+            if (email2 != "")
+            {
+                emails = emails + "\r\n" + email2;
+            }
+            if (email3 != "")
+            {
+                emails = emails + "\r\n" + email3;
+            }
+            if (homepage != "")
+            {
+                emails = emails + "\r\nHomepage:\r\n" + homepage;
+            }
+
+            if (email == "" && email2 == "" && email3 == "" && homepage == "")
+            {
+                emails = emails + "\r\n";
+            }
+            else
+            {
+                emails = emails.Trim() + "\r\n\r\n\r\n";
+            }
+
+            if (address2 == "" && phone2 == "" && notes == "")
+            {
+                emails = emails.Trim();
+            }
+            else if (address2 != "" && phone2 != "" && notes != "")
+            {
+                secondary = secondary + address2 + "\r\n\r\n" + "P: " + phone2 + "\r\n\r\n" + notes;
+            }
+            else if (address2 == "" && phone2 != "" && notes != "")
+            {
+                secondary = secondary + "\r\nP: " + phone2 + "\r\n\r\n" + notes;
+            }
+            else if (address2 == "" && phone2 == "" && notes != "")
+            {
+                secondary = secondary + notes;
+            }
+            else if (address2 == "" && phone2 != "" && notes == "")
+            {
+                secondary = secondary + "\r\nP: " + phone2;
+            }
+            else if (address2 != "" && phone2 == "" && notes == "")
+            {
+                secondary = secondary + address2;
+            }
+            else if (address2 != "" && phone2 != "" && notes == "")
+            {
+                secondary = secondary + address2 + "\r\n\r\nP: " + phone2;
+            }
+            else 
+            {
+                secondary = secondary + address2 + "\r\n\r\n" + notes;
+            }
+
+            return names + personal + phones + emails + secondary;
         }
 
         public ContactHelper Create(ContactData contact)
