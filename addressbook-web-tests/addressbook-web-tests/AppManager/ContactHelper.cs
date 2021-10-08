@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Firefox;
@@ -117,135 +118,26 @@ namespace addressbook_web_tests
             string phone2 = driver.FindElement(By.Name("phone2")).GetAttribute("value");
             string notes = driver.FindElement(By.Name("notes")).Text;
 
-            string names = "";
-            string personal = "";
-            string phones = "";
-            string emails = "";
-            string secondary = "";
 
-            if (firstname != "")
-            {
-                names = names + firstname;
-            }
-            if (middlename != "")
-            {
-                names = names + " " + middlename;
-            }
-            if (lastname != "")
-            {
-                names = names + " " + lastname;
-            }
+            string names = Regex.Replace($"{firstname} {middlename} {lastname}".Trim(), @"\s+", " ");
+            string personal = Regex.Replace($"{nickname}\r\n{title}\r\n{company}\r\n{address}".Trim(), @"[\r\n]+", "\r\n");
 
-            names = names.Trim() + "\r\n";
+            string homePhoneTemp = (homePhone == "") ? "" : $"H: {homePhone}";
+            string mobilePhoneTemp = (mobilePhone == "") ? "" : $"M: {mobilePhone}";
+            string workPhoneTemp = (workPhone == "") ? "" : $"W: {workPhone}";
+            string faxTemp = (fax == "") ? "" : $"F: {fax}";
+            string phones = Regex.Replace($"{homePhoneTemp}\r\n{mobilePhoneTemp}\r\n{workPhoneTemp}\r\n{faxTemp}".Trim(), @"[\r\n]+", "\r\n");
 
-            if (nickname != "")
-            {
-                personal = personal + nickname;
-            }
-            if (title != "")
-            {
-                personal = personal + "\r\n"  + title;
-            }
-            if (company != "")
-            {
-                personal = personal + "\r\n" + company;
-            }
-            if (address != "")
-            {
-                personal = personal + "\r\n" + address;
-            }
+            string homepageTemp = (homepage == "") ? "" : $"Homepage:\r\n{homepage}";
+            string emails = Regex.Replace($"{email}\r\n{email2}\r\n{email3}\r\n{homepageTemp}".Trim(), @"[\r\n]+", "\r\n");
 
-            if (nickname == "" && title == "" && company == "" && address == "")
-            {
-                personal = personal + "\r\n";
-            }
-            else
-            {
-                personal = personal.Trim() + "\r\n\r\n";
-            }
+            string phone2Temp = (phone2 == "") ? "" : $"P: {phone2}";
+            string secondary = Regex.Replace($"{address2}\r\n\r\n{phone2Temp}\r\n\r\n{notes}".Trim(), @"[\r\n\r\n\r\n\r\n]+", "\r\n\r\n");
 
-            if (homePhone != "")
-            {
-                phones = phones + "H: " + homePhone;
-            }
-            if (mobilePhone != "")
-            {
-                phones = phones + "\r\nM: " + mobilePhone;
-            }
-            if (workPhone != "")
-            {
-                phones = phones + "\r\nW: " + workPhone;
-            }
-            if (fax != "")
-            {
-                phones = phones + "\r\nF: " + fax;
-            }
-
-            if (!(homePhone == "" && mobilePhone == "" && workPhone == "" && fax == ""))
-            {
-                phones = phones.Trim() + "\r\n\r\n";
-            }
-
-            if (email != "")
-            {
-                emails = emails + email;
-            }
-            if (email2 != "")
-            {
-                emails = emails + "\r\n" + email2;
-            }
-            if (email3 != "")
-            {
-                emails = emails + "\r\n" + email3;
-            }
-            if (homepage != "")
-            {
-                emails = emails + "\r\nHomepage:\r\n" + homepage;
-            }
-
-            if (email == "" && email2 == "" && email3 == "" && homepage == "")
-            {
-                emails = emails + "\r\n";
-            }
-            else
-            {
-                emails = emails.Trim() + "\r\n\r\n\r\n";
-            }
-
-            if (address2 == "" && phone2 == "" && notes == "")
-            {
-                emails = emails.Trim();
-            }
-            else if (address2 != "" && phone2 != "" && notes != "")
-            {
-                secondary = secondary + address2 + "\r\n\r\n" + "P: " + phone2 + "\r\n\r\n" + notes;
-            }
-            else if (address2 == "" && phone2 != "" && notes != "")
-            {
-                secondary = secondary + "\r\nP: " + phone2 + "\r\n\r\n" + notes;
-            }
-            else if (address2 == "" && phone2 == "" && notes != "")
-            {
-                secondary = secondary + notes;
-            }
-            else if (address2 == "" && phone2 != "" && notes == "")
-            {
-                secondary = secondary + "\r\nP: " + phone2;
-            }
-            else if (address2 != "" && phone2 == "" && notes == "")
-            {
-                secondary = secondary + address2;
-            }
-            else if (address2 != "" && phone2 != "" && notes == "")
-            {
-                secondary = secondary + address2 + "\r\n\r\nP: " + phone2;
-            }
-            else 
-            {
-                secondary = secondary + address2 + "\r\n\r\n" + notes;
-            }
-
-            return names + personal + phones + emails + secondary;
+            string emailsTemp = (emails == "") ? "" : $"\r\n\r\n{emails}";
+            string phonesTemp = (phones == "") ? "" : $"\r\n\r\n{phones}";
+            
+            return $"{names}\r\n{personal}{phonesTemp}{emailsTemp}\r\n\r\n\r\n{secondary}".Trim();
         }
 
         public ContactHelper Create(ContactData contact)

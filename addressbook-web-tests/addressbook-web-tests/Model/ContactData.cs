@@ -11,10 +11,6 @@ namespace addressbook_web_tests
     {
         private string allPhones;
         private string allEmails;
-        private string personalBlock;
-        private string phoneBlock;
-        private string emailBlock;
-        private string summaryBlock;
 
         public ContactData(string firstname, string lastname)
         {
@@ -118,128 +114,12 @@ namespace addressbook_web_tests
                 }
                 else
                 {
-                    string res = "";
-
-                    if (Email != "")
-                    {
-                        res += Email;
-                    }
-                    if (Email2 != "")
-                    {
-                        res = res + "\r\n" + Email2;
-                    }
-                    if (Email3 != "")
-                    {
-                        res = res + "\r\n" + Email3;
-                    }
-
-                    return res.Trim();
+                    return (Email + "\r\n" + Email2 + "\r\n" + Email3).Replace("\r\n\r\n", "\r\n").Trim();
                 }
             }
             set
             {
                 allEmails = value;
-            }
-        }
-
-
-        public string PersonalBlock
-        {
-            get
-            {
-                if (personalBlock != null)
-                {
-                    return personalBlock;
-                }
-                else
-                {
-                    if (Middlename != "")
-                    {
-                        return (Firstname + " " + Middlename + " " + Lastname
-                        + Nickname
-                        + Title
-                        + Company
-                        + Address).Trim();
-                    }
-                    else
-                    {
-                        return (Firstname + " " + Lastname
-                        + Nickname
-                        + Title
-                        + Company
-                        + Address).Trim();
-                    }
-                    
-                }
-            }
-            set
-            {
-                personalBlock = value;
-            }
-        }
-
-        public string PhoneBlock
-        {
-            get
-            {
-                if (phoneBlock != null)
-                {
-                    return phoneBlock;
-                }
-                else
-                {
-                    return ("H: " + Home
-                        + "M: " + Mobile
-                        + "W: " + Work 
-                        + "F: " + Fax).Trim();
-                }
-            }
-            set
-            {
-                phoneBlock = value;
-            }
-        }
-
-        public string EmailBlock
-        {
-            get
-            {
-                if (emailBlock != null)
-                {
-                    return emailBlock;
-                }
-                else
-                {
-                    return (Email 
-                        + Email2
-                        + Email3
-                        + "Homepage:" + Homepage).Trim();
-                }
-            }
-            set
-            {
-                emailBlock = value;
-            }
-        }
-
-        public string SummaryBlock
-        {
-            get
-            {
-                if (summaryBlock != null)
-                {
-                    return summaryBlock;
-                }
-                else
-                {
-                    return (Address2
-                        + "P: " + Phone2
-                        + Notes).Trim();
-                }
-            }
-            set
-            {
-                summaryBlock = value;
             }
         }
     }
