@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfGroupData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <GroupData>
+    <Name>G50</Name>
+    <Header>HGR5</Header>
+    <Footer>$DFG</Footer>
+  </GroupData>
+  <GroupData>
+    <Name>Y#P81E6D.</Name>
+    <Header>@F2-%L9P</Header>
+    <Footer>!</Footer>
+  </GroupData>
+</ArrayOfGroupData>
