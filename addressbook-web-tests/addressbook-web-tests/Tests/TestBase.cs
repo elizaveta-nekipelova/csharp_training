@@ -24,7 +24,7 @@ namespace addressbook_web_tests
             StringBuilder builder = new StringBuilder();
             for (int i = 0; i < l; i++)
             {
-                builder.Append(Convert.ToChar(32 + Convert.ToInt32(rnd.NextDouble() * 223)));
+                builder.Append(Convert.ToChar(32 + Convert.ToInt32(rnd.NextDouble() * 65)));
             }
             return builder.ToString();
         }
@@ -34,13 +34,13 @@ namespace addressbook_web_tests
             StringBuilder email = new StringBuilder();
             for (int i = 0; i < 10; i++)
             {
-                email.Append(Convert.ToChar(32 + Convert.ToInt32(rnd.NextDouble() * 223)));
+                email.Append(Convert.ToChar(32 + Convert.ToInt32(rnd.NextDouble() * 65)));
             }
 
             StringBuilder domain = new StringBuilder();
             for (int i = 0; i < 5; i++)
             {
-                domain.Append(Convert.ToChar(32 + Convert.ToInt32(rnd.NextDouble() * 223)));
+                domain.Append(Convert.ToChar(32 + Convert.ToInt32(rnd.NextDouble() * 65)));
             }
 
             return email.ToString() + "@" + domain.ToString() + ".com";
