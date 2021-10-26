@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace addressbook_web_tests
 {
     [TestFixture]
-    public class GroupModificationTests : AuthTestBase
+    public class GroupModificationTests : GroupTestBase
     {
         [Test]
         public void GroupModificationTest()
@@ -29,14 +29,14 @@ namespace addressbook_web_tests
                 app.Groups.Create(group);
             }
 
-            List<GroupData> oldGroups = app.Groups.GetGroupsList();
+            List<GroupData> oldGroups = GroupData.GetAll();
             GroupData oldData = oldGroups[index];
 
             app.Groups.Modify(index, newData);
 
-            Assert.AreEqual(oldGroups.Count, app.Groups.GetGroupsCount());
+            Assert.AreEqual(oldGroups.Count, GroupData.GetAll().Count);
 
-            List<GroupData> newGroups = app.Groups.GetGroupsList();
+            List<GroupData> newGroups = GroupData.GetAll();
 
             oldGroups[index].Name = newData.Name;
             oldGroups.Sort();

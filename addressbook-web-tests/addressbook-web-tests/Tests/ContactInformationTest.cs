@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
 
-namespace addressbook_web_tests.Tests
+namespace addressbook_web_tests
 {
     [TestFixture]
-    public class ContactInformationTest : AuthTestBase
+    public class ContactInformationTest : ContactTestBase
     {
         [Test]
         public void TestContactInformationFormAndEdit()

@@ -161,9 +161,29 @@ namespace addressbook_web_tests
             return this;
         }
 
-        internal ContactHelper Remove(int index)
+        public ContactHelper Modify(ContactData contact, ContactData newData)
+        {
+            driver.FindElement(By.XPath("(//input[@name='selected[]' and @value='" + contact.Id + "'])/../..//img[@title='Edit']")).Click();
+            FillContactForm(newData);
+            driver.FindElement(By.Name("update")).Click();
+            manager.Navigator.ReturnToHomePage();
+            contactsCache = null;
+            return this;
+        }
+
+        public ContactHelper Remove(int index)
         {
             driver.FindElement(By.XPath("(//input[@name='selected[]'])[" + (index + 1) + "]")).Click();
+            driver.FindElement(By.XPath("//input[@value='Delete']")).Click();
+            driver.SwitchTo().Alert().Accept();
+            manager.Navigator.ReturnToHomePage();
+            contactsCache = null;
+            return this;
+        }
+
+        public ContactHelper Remove(ContactData contact)
+        {
+            driver.FindElement(By.XPath("(//input[@name='selected[]' and @value='" + contact.Id + "'])")).Click();
             driver.FindElement(By.XPath("//input[@value='Delete']")).Click();
             driver.SwitchTo().Alert().Accept();
             manager.Navigator.ReturnToHomePage();

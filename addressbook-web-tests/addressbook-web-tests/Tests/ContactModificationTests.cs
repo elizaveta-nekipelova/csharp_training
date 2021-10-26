@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace addressbook_web_tests
 {
     [TestFixture]
-    public class ContactModificationTests : AuthTestBase
+    public class ContactModificationTests : ContactTestBase
     {
         [Test]
         public void ContactModificationTest()
@@ -27,11 +27,12 @@ namespace addressbook_web_tests
                 app.Contacts.Create(contact);
             }
 
-            List<ContactData> oldContacts = app.Contacts.GetContactsList();
+            List<ContactData> oldContacts = ContactData.GetAll();
+            ContactData toBeModified = oldContacts[index];
 
-            app.Contacts.Modify(index, newData);
+            app.Contacts.Modify(toBeModified, newData);
 
-            List<ContactData> newContacts = app.Contacts.GetContactsList();
+            List<ContactData> newContacts = ContactData.GetAll();
 
             oldContacts[index].Firstname = newData.Firstname;
             oldContacts[index].Lastname = newData.Lastname;
